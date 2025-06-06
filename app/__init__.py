@@ -4,6 +4,7 @@
 
 from flask import Flask, render_template, request, flash, redirect
 import html
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.helpers.session import init_session
 from app.helpers.db import connect_db, handle_db_errors
@@ -80,17 +81,13 @@ def show_one_thing(id):
 #-----------------------------------------------------------
 @app.post("/add")
 @handle_db_errors
-def add_a_thing():
-    # Get the data from the form
-    name  = request.form.get("name")
+def add():
+    # get the data from the form
+    name = request.form.get("name")
     price = request.form.get("price")
 
-    # Sanitise the inputs
-    name = html.escape(name)
-    price = html.escape(price)
-
     with connect_db() as client:
-        # Add the thing to the DB
+        # Add the things to the DB
         sql = "INSERT INTO things (name, price) VALUES (?, ?)"
         values = [name, price]
         client.execute(sql, values)
@@ -98,6 +95,37 @@ def add_a_thing():
         # Go back to the home page
         flash(f"Thing '{name}' added", "success")
         return redirect("/things")
+
+
+@app.post("/add-user")
+@handle_db_errors
+def add_a_user():
+    # get the data from the form
+    name = request.form.get("name")
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    #sanatize the inputs
+    name = html.escape
+    username = html.escape
+
+    print (name)
+    print (username)
+    print (password)
+    # Hash the password
+    hash = generate_password_hash(password)
+
+
+    with connect_db() as client:
+        # Add the user to the DB
+        sql = "INSERT INTO users (name, username, password_hash ) VALUES (?, ?, ?)"
+        values = [name, username, hash]
+        client.execute(sql, values)
+
+        # Go back to the home page
+        flash(f"user '{name}' added", "success")
+        return redirect("/")
+    
 
 
 #-----------------------------------------------------------
@@ -116,4 +144,8 @@ def delete_a_thing(id):
         flash("Thing deleted", "warning")
         return redirect("/things")
 
+
+@app.get("/signup")
+def signup():
+    return render_template("pages/signup.jinja")
 
