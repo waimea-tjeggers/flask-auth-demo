@@ -36,6 +36,10 @@
                 <li><strong><a href="/">Flask App Demo</a></strong></li>
             </ul>
 
+            {% if session.user_name %}
+                            <p>welcome, {{session.user_name}}</p>
+            {% endif %}
+
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/things">Things</a></li>

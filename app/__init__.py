@@ -2,7 +2,7 @@
 # App Creation and Launch
 #===========================================================
 
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, session
 import html
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -117,6 +117,8 @@ def add_a_user():
         sql = "INSERT INTO users (name, username, password_hash ) VALUES (?, ?, ?)"
         values = [name, username, hash]
         client.execute(sql, values)
+
+        
 
         # Go back to the home page
         flash(f"user '{name}' added", "success")
