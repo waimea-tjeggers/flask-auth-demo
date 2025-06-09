@@ -7,7 +7,7 @@ import html
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.helpers.session import init_session
-from app.helpers.db import connect_db, handle_db_errors
+from app.helpers.db import connect_db
 from app.helpers.errors import register_error_handlers, not_found_error
 
 
@@ -41,7 +41,6 @@ def about():
 # Things page route - Show all the things, and new thing form
 #-----------------------------------------------------------
 @app.get("/things/")
-@handle_db_errors
 def show_all_things():
     with connect_db() as client:
         # Get all the things from the DB
@@ -57,7 +56,6 @@ def show_all_things():
 # Thing page route - Show details of a single thing
 #-----------------------------------------------------------
 @app.get("/thing/<int:id>")
-@handle_db_errors
 def show_one_thing(id):
     with connect_db() as client:
         # Get the thing details from the DB
@@ -80,7 +78,6 @@ def show_one_thing(id):
 # Route for adding a thing, using data posted from a form
 #-----------------------------------------------------------
 @app.post("/add")
-@handle_db_errors
 def add():
     # get the data from the form
     name = request.form.get("name")
@@ -98,7 +95,6 @@ def add():
 
 
 @app.post("/add-user")
-@handle_db_errors
 def add_a_user():
     # get the data from the form
     name = request.form.get("name")
@@ -132,7 +128,6 @@ def add_a_user():
 # Route for deleting a thing, Id given in the route
 #-----------------------------------------------------------
 @app.get("/delete/<int:id>")
-@handle_db_errors
 def delete_a_thing(id):
     with connect_db() as client:
         # Delete the thing from the DB
