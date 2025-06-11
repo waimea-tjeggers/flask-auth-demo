@@ -22,14 +22,24 @@
     <article>
 
         <header>
-            <h3>{{ thing.name }}</h3>
+            <h3>{{ thing.t_name }}</h3>
         </header>
 
-        <p>Price: <strong>${{ thing.price }}</strong></p>
+        <p>Owner: <strong>{{ thing.u_name }}</strong></p>
 
-        <footer>
-            <a href="/delete/{{ thing.id }}" onclick="return confirm('Really delete?');">Delete</a>
-        </footer>
+        {# Is user logged in? #}
+        {% if session.user_id %}
+
+            {# And are they the owner of this thing? #}
+            {% if session.user_id == thing.u_id %}
+
+                <footer>
+                    <a href="/delete/{{ thing.t_id }}" onclick="return confirm('Really delete?');">Delete</a>
+                </footer>
+
+            {% endif %}
+
+        {% endif %}
 
     </article>
 
@@ -37,4 +47,3 @@
     <a role="button" href="/things">Back to Thing List</a>
 
 {% endblock %}
-
